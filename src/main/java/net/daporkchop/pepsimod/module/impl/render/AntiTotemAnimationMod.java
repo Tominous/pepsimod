@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class AntiTotemAnimationMod extends Module {
     public static AntiTotemAnimationMod INSTANCE;

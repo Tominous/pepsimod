@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.module.impl.movement;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.Vector3d;

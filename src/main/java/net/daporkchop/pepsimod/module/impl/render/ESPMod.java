@@ -18,9 +18,6 @@ package net.daporkchop.pepsimod.module.impl.render;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.OptionCompletions;
-import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.RenderColor;
 import net.daporkchop.pepsimod.util.config.impl.ESPTranslator;
 import net.daporkchop.pepsimod.util.config.impl.FriendsTranslator;
@@ -30,7 +27,6 @@ import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
 
 public class ESPMod extends Module {
     public static final RenderColor friendColor = new RenderColor(76, 144, 255, 255);

@@ -19,8 +19,6 @@ package net.daporkchop.pepsimod.module.impl.misc;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.ModuleManager;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.util.config.impl.NotificationsTranslator;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketChat;

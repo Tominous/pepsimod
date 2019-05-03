@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.clickgui.entry;
 
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
 import net.daporkchop.pepsimod.module.api.option.ExtensionType;
 import net.daporkchop.pepsimod.util.PepsiUtils;

@@ -20,7 +20,6 @@ import net.daporkchop.pepsimod.clickgui.ClickGUI;
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.lwjgl.input.Keyboard;

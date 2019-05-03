@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.clickgui.entry;
 
 import net.daporkchop.pepsimod.clickgui.Window;
 import net.daporkchop.pepsimod.clickgui.api.EntryImplBase;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorUtils;
 import org.lwjgl.opengl.GL11;

@@ -18,8 +18,6 @@ package net.daporkchop.pepsimod.module.impl.combat;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
-import net.daporkchop.pepsimod.module.api.OptionCompletions;
 import net.daporkchop.pepsimod.util.config.impl.CriticalsTranslator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

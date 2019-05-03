@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.module.impl.misc;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class NoFallMod extends Module {
     public static boolean NO_FALL = false;

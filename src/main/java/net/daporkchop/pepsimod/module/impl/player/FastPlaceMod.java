@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.module.impl.player;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
 
 public class FastPlaceMod extends Module {

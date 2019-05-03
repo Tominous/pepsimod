@@ -18,7 +18,6 @@ package net.daporkchop.pepsimod.module.impl.movement;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 
 public class AutoRespawnMod extends Module {
     public AutoRespawnMod INSTANCE;

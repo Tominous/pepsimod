@@ -18,10 +18,7 @@ package net.daporkchop.pepsimod.module.impl.movement;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.ModuleOption;
 import net.daporkchop.pepsimod.optimization.OverrideCounter;
-import net.daporkchop.pepsimod.util.ReflectionStuff;
-import org.lwjgl.input.Keyboard;
 
 public class AutoWalkMod extends Module {
     public static AutoWalkMod INSTANCE;
