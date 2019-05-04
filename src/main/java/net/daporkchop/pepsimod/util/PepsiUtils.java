@@ -519,11 +519,11 @@ public class PepsiUtils extends PepsiConstants {
         GlStateManager.pushMatrix();
 
         double dist = new Vec3d(x, y + offset, z).length();
-        /*{
+        {
             offset *= dist / 4.0d;
             Vec3d vec = new Vec3d(x, y + offset, z).normalize().scale(4.0d);
             GlStateManager.translate(vec.x, vec.y, vec.z);
-        }*/
+        }
         GlStateManager.translate(x, y + offset, z);
 
         GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
@@ -557,7 +557,7 @@ public class PepsiUtils extends PepsiConstants {
 
         int color = 0x20FFFFFF;
         color = 0xFFFFFFFF;
-        //fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift - 7, color);
+        fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, verticalShift - 7, color);
         GlStateManager.enableDepth();
 
         GlStateManager.depthMask(true);
@@ -596,7 +596,7 @@ public class PepsiUtils extends PepsiConstants {
                 scale
         );
 
-        /*
+        
         RenderManager renderManager = mc.getRenderManager();
 
         float playerX = (float) (mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTickTime);
