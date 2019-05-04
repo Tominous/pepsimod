@@ -52,7 +52,7 @@ public class AccountManager extends PepsiConstants {
             for (Field f : mc.getDeclaredFields()) {
                 if (f.getType().isInstance(s)) {
                     session = f;
-                    //FMLLog.log.info("Found field " + f.toString() + ", injecting...");
+                    FMLLog.log.info("Found field " + f.toString() + ", injecting...");
                 }
             }
 
@@ -81,11 +81,11 @@ public class AccountManager extends PepsiConstants {
      */
     public void setUser(String username, String password) {
         if (Minecraft.getMinecraft().getSession().getUsername() != username || "0".equals(Minecraft.getMinecraft().getSession().getToken())) {
-            /*for (Config.AccountEntry data : PepsiMod.pepsimodInstance.getConfig().getAccounts()) {
+            for (Config.AccountEntry data : PepsiMod.pepsimodInstance.getConfig().getAccounts()) {
                 if (data.getUsername().equals(Minecraft.getMinecraft().getSession().getUsername()) && data.getUsername().equals(username)) {
                     return;
                 }
-            }*/
+            }
             this.auth.logOut();
             this.auth.setUsername(username);
             this.auth.setPassword(password);
@@ -93,12 +93,12 @@ public class AccountManager extends PepsiConstants {
                 this.auth.logIn();
                 Session session = new Session(this.auth.getSelectedProfile().getName(), UUIDTypeAdapter.fromUUID(this.auth.getSelectedProfile().getId()), this.auth.getAuthenticatedToken(), this.auth.getUserType().getName());
                 this.setSession(session);
-                /*for (int i = 0; i < PepsiMod.pepsimodInstance.getConfig().getAccounts().size(); i++) {
+                for (int i = 0; i < PepsiMod.pepsimodInstance.getConfig().getAccounts().size(); i++) {
                     Config.AccountEntry data = PepsiMod.pepsimodInstance.getConfig().getAccounts().get(i);
                     if (data.getUsername().equals(username) && data.getPassword().equals(password)) {
                         data.setName(session.getUsername());
                     }
-                }*/
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
