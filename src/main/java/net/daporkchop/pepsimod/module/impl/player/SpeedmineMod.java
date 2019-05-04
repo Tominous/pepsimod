@@ -1,7 +1,7 @@
 /*
  * Adapted from the Wizardry License
  *
- * Copyright (c) 2017-2018 DaPorkchop_
+ * Copyright (c) 2017-2019 DaPorkchop_
  *
  * Permission is hereby granted to any persons and/or organizations using this software to copy, modify, merge, publish, and distribute it.
  * Said persons and/or organizations are not allowed to use the software or any derivatives of the work for commercial use or any other means to generate income, nor are they allowed to claim this software as their own.
@@ -18,10 +18,8 @@ package net.daporkchop.pepsimod.module.impl.player;
 
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.api.Module;
-import net.daporkchop.pepsimod.module.api.option.ExtensionSlider;
-import net.daporkchop.pepsimod.module.api.option.ExtensionType;
+import net.daporkchop.pepsimod.module.option.Option;
 import net.daporkchop.pepsimod.util.ReflectionStuff;
-import net.daporkchop.pepsimod.util.config.impl.SpeedmineTranslator;
 
 public class SpeedmineMod extends Module {
     public static SpeedmineMod INSTANCE;
@@ -30,25 +28,27 @@ public class SpeedmineMod extends Module {
         INSTANCE = this;
     }
 
+    @Option("speed")
+    @Option.Float(min = 0.0f, max = 1.0f, step = 0.1f)
+    public float speed = 0.4f;
+
     public SpeedmineMod() {
         super("Speedmine");
     }
 
     @Override
     public void onEnable() {
-
     }
 
     @Override
     public void onDisable() {
-
     }
 
     @Override
     public void tick() {
         if (mc.world != null) {
-            if (ReflectionStuff.getCurBlockDamageMP() < SpeedmineTranslator.INSTANCE.speed) {
-                ReflectionStuff.setCurBlockDamageMP(SpeedmineTranslator.INSTANCE.speed);
+            if (ReflectionStuff.getCurBlockDamageMP() < this.speed) {
+                ReflectionStuff.setCurBlockDamageMP(this.speed);
             }
             if (ReflectionStuff.getBlockHitDelay() > 1) {
                 ReflectionStuff.setBlockHitDelay(1);
@@ -59,20 +59,6 @@ public class SpeedmineMod extends Module {
     @Override
     public void init() {
         INSTANCE = this;
-    }
-
-    @Override
-    public ModuleOption[] getDefaultOptions() {
-        return new ModuleOption[]{
-                new ModuleOption<>(SpeedmineTranslator.INSTANCE.speed, "speed", OptionCompletions.FLOAT,
-                        (value) -> {
-                            SpeedmineTranslator.INSTANCE.speed = Math.max(0, value);
-                            return true;
-                        },
-                        () -> {
-                            return SpeedmineTranslator.INSTANCE.speed;
-                        }, "Speed", new ExtensionSlider(ExtensionType.VALUE_FLOAT, 0.1f, 1f, 0.1f))
-        };
     }
 
     public ModuleCategory getCategory() {

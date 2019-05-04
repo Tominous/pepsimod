@@ -58,4 +58,33 @@ public @interface Option {
      * game) if impossible.
      */
     String reader() default "";
+
+    /**
+     * An additional comment for this config option. This will be displayed e.g. in the ClickGUI when
+     * hovering over the option.
+     * <p>
+     * Each array value represents a new line, newline characters will be ignored.
+     */
+    String[] comment() default {};
+
+    /**
+     * Whether or not this option will be displayed in the ClickGUI.
+     */
+    boolean displayInClickGUI() default true;
+
+    @interface Float    {
+        float min();
+
+        float max();
+
+        float step();
+    }
+
+    @interface Int    {
+        int min();
+
+        int max();
+
+        int step();
+    }
 }

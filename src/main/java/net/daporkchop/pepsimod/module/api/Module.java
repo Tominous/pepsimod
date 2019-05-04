@@ -20,9 +20,11 @@ import net.daporkchop.pepsimod.command.CommandRegistry;
 import net.daporkchop.pepsimod.command.api.Command;
 import net.daporkchop.pepsimod.module.ModuleCategory;
 import net.daporkchop.pepsimod.module.ModuleManager;
+import net.daporkchop.pepsimod.module.option.ImplOption;
 import net.daporkchop.pepsimod.util.PepsiUtils;
 import net.daporkchop.pepsimod.util.colors.ColorizedText;
 import net.daporkchop.pepsimod.util.colors.rainbow.RainbowText;
+import net.daporkchop.pepsimod.util.config.OptionHolder;
 import net.daporkchop.pepsimod.util.config.impl.GeneralTranslator;
 import net.daporkchop.pepsimod.util.config.impl.HUDTranslator;
 import net.daporkchop.pepsimod.util.event.MoveEvent;
@@ -51,9 +53,10 @@ public abstract class Module extends Command implements ITickListener {
             return in;
         }
     }
+
     public KeyBinding keybind;
     public ColorizedText text;
-    public ModuleOption[] options;
+    public OptionHolder<?> options;
     public String nameFull;
     public String[] completionOptions;
     public GeneralTranslator.ModuleState state;
@@ -62,10 +65,11 @@ public abstract class Module extends Command implements ITickListener {
         this(false, name, -1, false);
     }
 
+    @SuppressWarnings("unchecked")
     public Module(boolean def, String name, int keybind, boolean hide) {
         super(name.toLowerCase());
         this.nameFull = name;
-        this.options = this.getDefaultOptions();
+        this.options = new OptionHolder(this.getClass());
         this.registerKeybind(name, keybind);
         this.state = GeneralTranslator.INSTANCE.getState(name, new GeneralTranslator.ModuleState(def, hide));
         if (this.state == null) {
@@ -114,28 +118,8 @@ public abstract class Module extends Command implements ITickListener {
             this.text = new RainbowText(this.nameFull);
         }
         CommandRegistry.registerCommand(this);
-        ArrayList<String> temp = new ArrayList<>();
-        for (ModuleOption option : this.options) {
-            temp.add(option.getName());
-        }
-        //temp.add("list"); is this really needed? get opinions
-        this.completionOptions = temp.toArray(new String[temp.size()]);
-    }
 
-    /**
-     * Gets a ModuleOption by name
-     *
-     * @param name the name to search for
-     * @return a ModuleOption by the given name, null if there was nothing with the name
-     */
-    public ModuleOption getOptionByName(String name) {
-        for (ModuleOption moduleOption : this.options) {
-            if (moduleOption.getName().equals(name)) {
-                return moduleOption;
-            }
-        }
-
-        return null;
+        this.completionOptions = this.options.options.keySet().stream().toArray(String[]::new);;
     }
 
     public boolean shouldTick() {
@@ -156,11 +140,6 @@ public abstract class Module extends Command implements ITickListener {
      * Called when minecraft is started
      */
     public abstract void init();
-
-    /**
-     * Module specific module settings
-     */
-    protected abstract ModuleOption[] getDefaultOptions();
 
     /**
      * Called directly after a packet is recieved, before it's processed
@@ -236,11 +215,11 @@ public abstract class Module extends Command implements ITickListener {
                 }
                 for (String mode : this.completionOptions) {
                     if (mode.equals(args[1])) {
-                        ModuleOption option = this.getOptionByName(args[1]);
+                        ImplOption option = this.options.options.get(args[1]);
                         if (option == null) {
                             return "";
                         } else {
-                            return args[0] + " " + args[1] + " " + option.getDefaultValue();
+                            return args[0] + " " + args[1] + " " + option.getFirstCompletion();
                         }
                     } else if (mode.startsWith(args[1])) {
                         return "." + this.name + " " + mode;
@@ -249,27 +228,23 @@ public abstract class Module extends Command implements ITickListener {
                 return "";
             case 3:
                 if (args[2].isEmpty()) {
-                    ModuleOption option = this.getOptionByName(args[1].trim());
+                    ImplOption option = this.options.options.get(args[1].trim());
                     if (option == null) {
                         return "";
                     } else {
-                        return args[0] + " " + args[1] + " " + option.getDefaultValue();
+                        return args[0] + " " + args[1] + " " + option.getFirstCompletion();
                     }
                 }
-                ModuleOption option = this.getOptionByName(args[1]);
+                ImplOption option = this.options.options.get(args[1]);
                 if (option == null) {
                     return "";
                 } else {
-                    if (option.getDefaultValue().toString().startsWith(args[2])) {
-                        return args[0] + " " + args[1] + " " + option.getDefaultValue();
-                    } else {
-                        for (String s : option.defaultCompletions()) {
+                        for (String s : option.completions) {
                             if (s.startsWith(args[2])) {
                                 return args[0] + " " + args[1] + " " + s;
                             }
                         }
                         return "";
-                    }
                 }
         }
 
@@ -294,71 +269,58 @@ public abstract class Module extends Command implements ITickListener {
                     clientMessage(cmds);
                     break;
                 }
-                ModuleOption option = this.getOptionByName(args[1]);
+                ImplOption option = this.options.options.get(args[1]);
                 if (option == null) {
                     clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
                     break;
                 } else {
-                    clientMessage(args[1] + ": " + option.getValue());
+                    clientMessage(args[1] + ": " + option.getValueAsString(this));
                     break;
                 }
             case 3:
                 if (args[2].isEmpty()) {
-                    ModuleOption opt = this.getOptionByName(args[1]);
-                    if (opt == null) {
+                    option = this.options.options.get(args[1]);
+                    if (option == null) {
                         clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
                         break;
                     } else {
-                        clientMessage(args[1] + ": " + opt.getValue());
+                        clientMessage(args[1] + ": " + option.getValueAsString(this));
                         break;
                     }
                 }
-                ModuleOption opt = this.getOptionByName(args[1]);
-                if (opt == null) {
+                option = this.options.options.get(args[1]);
+                if (option == null) {
                     clientMessage("Unknown option: " + PepsiUtils.COLOR_ESCAPE + "o" + args[1]);
                     break;
                 } else {
                     try {
-                        switch (opt.getValue().getClass().getCanonicalName()) {
+                        switch (option.field.getClassType().getCanonicalName()) {
                             case "java.lang.String":
-                                opt.setValue(args[2]);
+                                option.field.set(this, args[2]);
                                 break;
                             case "java.lang.Boolean":
-                                opt.setValue(Boolean.parseBoolean(args[2]));
+                                option.field.setBoolean(this, Boolean.parseBoolean(args[2]));
                                 break;
                             case "java.lang.Byte":
-                                opt.setValue(Byte.parseByte(args[2]));
+                                option.field.setByte(this, Byte.parseByte(args[2]));
                                 break;
                             case "java.lang.Double":
-                                opt.setValue(Double.parseDouble(args[2]));
+                                option.field.setDouble(this, Double.parseDouble(args[2]));
                                 break;
                             case "java.lang.Float":
-                                opt.setValue(Float.parseFloat(args[2]));
+                                option.field.setFloat(this, Float.parseFloat(args[2]));
                                 break;
                             case "java.lang.Integer":
-                                opt.setValue(Integer.parseInt(args[2]));
+                                option.field.setInt(this, Integer.parseInt(args[2]));
                                 break;
                             case "java.lang.Short":
-                                opt.setValue(Short.parseShort(args[2]));
+                                option.field.setShort(this, Short.parseShort(args[2]));
                                 break;
                             default:
-                                clientMessage("Unknown value type: " + PepsiUtils.COLOR_ESCAPE + "o" + opt.getValue().getClass().getCanonicalName() + PepsiUtils.COLOR_ESCAPE + "r. Please report to devs!");
+                                clientMessage("Unknown value type: " + PepsiUtils.COLOR_ESCAPE + "o" + option.field.getClassType().getClass().getCanonicalName() + PepsiUtils.COLOR_ESCAPE + "r. Please report to devs!");
                                 return;
                         }
-
-                        switch (args[1]) {
-                            case "hidden":
-                                this.state.hidden = (boolean) opt.getValue();
-                                break;
-                            case "enabled":
-                                if ((boolean) opt.getValue()) {
-                                    ModuleManager.enableModule(this);
-                                } else {
-                                    ModuleManager.disableModule(this);
-                                }
-                                break;
-                        }
-                        clientMessage("Set " + PepsiUtils.COLOR_ESCAPE + "o" + args[1] + PepsiUtils.COLOR_ESCAPE + "r to " + PepsiUtils.COLOR_ESCAPE + "o" + opt.getValue());
+                        clientMessage("Set " + PepsiUtils.COLOR_ESCAPE + "o" + args[1] + PepsiUtils.COLOR_ESCAPE + "r to " + PepsiUtils.COLOR_ESCAPE + "o" + option.getValueAsString(this));
                     } catch (NumberFormatException e) {
                         clientMessage("Invalid number: " + PepsiUtils.COLOR_ESCAPE + "o" + args[2]);
                     }

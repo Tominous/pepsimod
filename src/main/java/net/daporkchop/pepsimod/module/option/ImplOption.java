@@ -39,9 +39,14 @@ public class ImplOption<H> {
     public final String name;
     public final String displayName;
     public final String[] completions;
+    public final String[] comment;
     public final PField field;
     public final BiConsumer<JsonObject, H> writer;
     public final BiConsumer<JsonObject, H> reader;
+
+    public final Number min;
+    public final Number max;
+    public final Number step;
 
     @SuppressWarnings("unchecked")
     public ImplOption(PField field) {
@@ -54,6 +59,7 @@ public class ImplOption<H> {
         this.name = o.value();
         this.displayName = o.displayName().isEmpty() ? this.name : o.displayName();
         this.completions = o.completions();
+        this.comment = o.comment();
 
         if (o.writer().isEmpty()) {
             //god damn this is ugly
@@ -136,5 +142,32 @@ public class ImplOption<H> {
             }
             this.reader = (EBiConsumer<JsonObject, H>) (object, holder) -> method.invoke(null, object, holder);
         }
+
+        Option.Int i = field.getAnnotation(Option.Int.class);
+        Option.Float f = field.getAnnotation(Option.Float.class);
+        if (i != null && f != null) {
+            throw new IllegalStateException("cannot be both a float and an int!");
+        } else if (i != null)   {
+            this.min = i.min();
+            this.max = i.max();
+            this.step = i.step();
+        } else if (f != null)   {
+            this.min = f.min();
+            this.max = f.max();
+            this.step = f.step();
+        } else {
+            this.min = this.max = this.step = null;
+        }
+    }
+
+    public String getFirstCompletion()  {
+        return this.completions.length == 0 ? "" : this.completions[0];
+    }
+
+    @SuppressWarnings("unchecked")
+    public String getValueAsString(Object holder)   {
+        JsonObject object = new JsonObject();
+        this.writer.accept(object, (H) holder);
+        return object.has("value") ? object.get("value").getAsString() : "unknown";
     }
 }
